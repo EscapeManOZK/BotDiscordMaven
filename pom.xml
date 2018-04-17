@@ -23,7 +23,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>3.6.0_354-withDependencies</version>
+            <version>JDA-3.6.0_354-withDependencies</version>
         </dependency>
 
     </dependencies>
