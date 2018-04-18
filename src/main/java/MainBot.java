@@ -32,12 +32,6 @@ public class MainBot extends ListenerAdapter {
         /**
          * This is the method where the program starts.
          */
-        public static void main(String[] args)
-        {
-            MainBot run = new MainBot();
-            args[0]= System.getenv("TOKEN");
-            run.run(args);
-        }
 
         private void initCommand() {
             GCommand = new GestionCommande();
