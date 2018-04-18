@@ -3,6 +3,7 @@ import net.dv8tion.jda.client.entities.Group;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import javax.security.auth.login.LoginException;
 import javax.swing.*;
@@ -14,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-public class Main {
+public class Main extends ListenerAdapter {
 
     private static boolean stop=false;
         private GestionCommande GCommand;
@@ -180,7 +181,7 @@ public class Main {
          *          sent in a channel.
          */
         @Override
-        private void onMessageReceived(MessageReceivedEvent event)
+        public void onMessageReceived(MessageReceivedEvent event)
         {
 
             User author = event.getAuthor();
@@ -330,7 +331,7 @@ public class Main {
                     }
 
                 }
-            }else if (event.getTextChannel().getId().equals("430035981660454942")){
+            }else if (event.getTextChannel().getId().equals("430035981660454942")&&msg.contains(event.getAuthor().getName())){
                 event.getAuthor().openPrivateChannel().complete().sendTyping().queue();
                 event.getTextChannel().sendTyping().queue();
                 EmbedBuilder build = new EmbedBuilder();
