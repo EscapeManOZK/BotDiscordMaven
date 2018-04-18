@@ -35,6 +35,7 @@ public class MainBot extends ListenerAdapter {
         public static void main(String[] args)
         {
             MainBot run = new MainBot();
+            args[0]= System.getenv("TOKEN");
             run.run(args);
         }
 
