@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-public class Main extends ListenerAdapter {
+public class MainBot extends ListenerAdapter {
 
     private static boolean stop=false;
         private GestionCommande GCommand;
@@ -34,7 +34,7 @@ public class Main extends ListenerAdapter {
          */
         public static void main(String[] args)
         {
-            Main run = new Main();
+            MainBot run = new MainBot();
             run.run(args);
         }
 
@@ -104,7 +104,7 @@ public class Main extends ListenerAdapter {
             stop = true;
         }
 
-        private void run(String[] args) {
+        public void run(String[] args) {
             initCommand();
             initServeur();
             try
