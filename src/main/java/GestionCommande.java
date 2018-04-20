@@ -21,12 +21,14 @@ public class GestionCommande {
         Commande on = new Commande("ONLINE", "online","Affiche les serveurs disponibles");
         Commande off = new Commande("OFFLINE", "offline","Affiche les serveurs non disponible");
         Commande clean = new Commande("CLEAN","clean","<Nb de message> Supprime le nombre indiqué de messages dans le channel ");
+        Commande player = new Commande("PLAYER","player","Affiche le nombre de personne connecter");
         Commande Message = new Commande("","mp","");
         m_command.add(help);
         m_command.add(etat);
         m_command.add(server);
         m_command.add(on);
         m_command.add(off);
+        m_command.add(player);
         m_command.add(clean);
         m_command.add(Message);
     }
@@ -67,7 +69,7 @@ public class GestionCommande {
         return build;
     }
 
-    public EmbedBuilder CommandEtat(GestionServer Gsrv,User event){
+    public EmbedBuilder CommandEtat(GestionServer Gsrv, GestionNbPlayer GPlayer, User event){
         SimpleDateFormat d = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat h = new SimpleDateFormat("hh:mm");
 
@@ -78,6 +80,7 @@ public class GestionCommande {
         EmbedBuilder build = new EmbedBuilder();
         build.setTitle("**ETAT  [ " + heureString + " , " + dateString + " ]**");
         build.setColor(Color.red);
+        build.appendDescription("Il y a actuellement "+GPlayer.getNb_joueur()+" depuis "+GPlayer.getTime()+"\n");
         build.appendDescription("\nVoici tous les serveurs : \n ");
         seeServerData(Gsrv, build);
         build.setFooter("©By "+event.getName()+" created by EscapeMan",event.getAvatarUrl());
@@ -184,7 +187,7 @@ public class GestionCommande {
         return build;
     }
 
-    public EmbedBuilder ChangeServeur(GestionServer Gsrv,User event){
+    public EmbedBuilder ChangeServeur(GestionServer Gsrv, GestionNbPlayer GPlayer, User event){
         SimpleDateFormat d = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat h = new SimpleDateFormat("hh:mm");
 
@@ -195,6 +198,7 @@ public class GestionCommande {
         EmbedBuilder build = new EmbedBuilder();
         build.setTitle("**ETAT_SERVEUR_CHANGE  [ " + heureString + " , " + dateString + " ]**");
         build.setColor(Color.red);
+        build.appendDescription("Il y a actuellement "+GPlayer.getNb_joueur()+"\n");
         build.appendDescription("\nVoici tous les serveurs : \n ");
         seeServerData(Gsrv, build);
         build.setFooter("©By "+event.getName()+" created by EscapeMan",event.getAvatarUrl());
@@ -255,6 +259,36 @@ public class GestionCommande {
             build.appendDescription(Mes);
             build.setFooter("©By "+usr.getName()+" created by EscapeMan",null);
         }
+        return build;
+    }
+    public EmbedBuilder CommandPlayer(GestionNbPlayer gp,User event){
+        SimpleDateFormat d = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat h = new SimpleDateFormat("hh:mm");
+
+        Date currentTime_1 = new Date();
+
+        String dateString = d.format(currentTime_1);
+        String heureString = h.format(currentTime_1);
+        EmbedBuilder build = new EmbedBuilder();
+        build.setColor(Color.red);
+        build.setTitle("**Nombre de joueur connecté[ "+heureString+" , "+dateString+" ]**");
+        build.appendDescription("Il y a actuellement "+gp.getNb_joueur()+" depuis "+gp.getTime());
+        build.setFooter("©By "+event.getName()+" created by EscapeMan",event.getAvatarUrl());
+        return build;
+    }
+    public EmbedBuilder ChangePlayer(GestionNbPlayer Gsrv,User event){
+        SimpleDateFormat d = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat h = new SimpleDateFormat("hh:mm");
+
+        Date currentTime_1 = new Date();
+
+        String dateString = d.format(currentTime_1);
+        String heureString = h.format(currentTime_1);
+        EmbedBuilder build = new EmbedBuilder();
+        build.setTitle("**NB_PLAYER_CHANGE  [ " + heureString + " , " + dateString + " ]**");
+        build.setColor(Color.red);
+        build.appendDescription("Il y a actuellement "+Gsrv.getNb_joueur());
+        build.setFooter("©By "+event.getName()+" created by EscapeMan",event.getAvatarUrl());
         return build;
     }
 }

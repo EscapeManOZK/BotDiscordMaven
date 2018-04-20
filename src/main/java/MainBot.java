@@ -20,6 +20,7 @@ public class MainBot extends ListenerAdapter {
     private static boolean stop=false;
         private GestionCommande GCommand;
         private GestionServer Gserver;
+        private GestionNbPlayer GPlayer;
         private boolean GserverInitialise = false;
         private TextChannel Information;
         private Message c;
@@ -41,6 +42,7 @@ public class MainBot extends ListenerAdapter {
         private void initServeur()  {
             try {
                 Gserver = new GestionServer();
+                GPlayer = new GestionNbPlayer();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -49,10 +51,15 @@ public class MainBot extends ListenerAdapter {
         private void onChangeServer() {
             //clean channel info
             try {
+                GestionNbPlayer GPtemps = new GestionNbPlayer();
+                if(GPlayer.NbplayerActualize(GPtemps)){
+                    Information.sendTyping().queue();
+                    Information.sendMessage(GCommand.ChangePlayer(GPlayer,Bot).build()).queue();
+                }
                 GestionServer Gtemps = new GestionServer();
                 if (Gserver.GroupServerActualise(Gtemps)){
                     Information.sendTyping().queue();
-                    Information.sendMessage(GCommand.ChangeServeur(Gserver,Bot).build()).queue();
+                    Information.sendMessage(GCommand.ChangeServeur(Gserver,GPlayer,Bot).build()).queue();
                 }/*else {
                 String message = "Les serveurs n'ont pas changer d'état";
                 if (Information.getLatestMessageId()!=null) {
@@ -74,6 +81,7 @@ public class MainBot extends ListenerAdapter {
                     sendMessageNoChange(message);
                 }
             }*/
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -123,7 +131,7 @@ public class MainBot extends ListenerAdapter {
             clean();
             Information.sendTyping().queue();
             Information.sendMessage("Hello everyone").queue();
-            Information.sendMessage(GCommand.CommandEtat(Gserver,Bot).build()).queue();
+            Information.sendMessage(GCommand.CommandEtat(Gserver,GPlayer,Bot).build()).queue();
             t = new Timer(3000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
@@ -230,8 +238,8 @@ public class MainBot extends ListenerAdapter {
             }
             i--;
             if (find) {
-                if (i == 5|| i==6) {
-                    if (i==5) {
+                if (i == 6|| i==7) {
+                    if (i==6) {
                         channel.sendTyping().queue();
                         channel.sendMessage(GCommand.CommandClean(event, msg, Bot).build()).queue();
                         List<Message> m = event.getTextChannel().getHistory().retrievePast(2).complete();
@@ -260,7 +268,7 @@ public class MainBot extends ListenerAdapter {
                                 privateChannel.sendMessage(GCommand.CommandHelp(Gserver, Bot).build()).queue();
                                 break;
                             case 1:    //état
-                                privateChannel.sendMessage(GCommand.CommandEtat(Gserver, Bot).build()).queue();
+                                privateChannel.sendMessage(GCommand.CommandEtat(Gserver, GPlayer, Bot).build()).queue();
                                 break;
                             case 2:    //server
                                 privateChannel.sendMessage(GCommand.CommandServer(Gserver, msg).build()).queue();
@@ -271,6 +279,9 @@ public class MainBot extends ListenerAdapter {
                             case 4:    //offline
                                 privateChannel.sendMessage(GCommand.CommandOff(Gserver).build()).queue();
                                 break;
+                            case 5:
+                                privateChannel.sendMessage(GCommand.CommandPlayer(GPlayer,Bot).build()).queue();
+                                break;
                         }
                     }else {
                         if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS) && event.getTextChannel().getId().equals("429046247798865920")) { // si il le bot à les droit pour écrires
@@ -280,7 +291,7 @@ public class MainBot extends ListenerAdapter {
                                     channel.sendMessage(GCommand.CommandHelp(Gserver, Bot).build()).queue();
                                     break;
                                 case 1:    //état
-                                    channel.sendMessage(GCommand.CommandEtat(Gserver, Bot).build()).queue();
+                                    channel.sendMessage(GCommand.CommandEtat(Gserver, GPlayer, Bot).build()).queue();
                                     break;
                                 case 2:    //server
                                     channel.sendMessage(GCommand.CommandServer(Gserver, msg).build()).queue();
@@ -291,6 +302,8 @@ public class MainBot extends ListenerAdapter {
                                 case 4:    //offline
                                     channel.sendMessage(GCommand.CommandOff(Gserver).build()).queue();
                                     break;
+                                case 5:
+                                    channel.sendMessage(GCommand.CommandPlayer(GPlayer,Bot).build()).queue();
                             }
 
 
@@ -306,7 +319,7 @@ public class MainBot extends ListenerAdapter {
                                     author.openPrivateChannel().complete().sendMessage(GCommand.CommandHelp(Gserver, Bot).build()).queue();
                                     break;
                                 case 1:    //état
-                                    author.openPrivateChannel().complete().sendMessage(GCommand.CommandEtat(Gserver, Bot).build()).queue();
+                                    author.openPrivateChannel().complete().sendMessage(GCommand.CommandEtat(Gserver, GPlayer, Bot).build()).queue();
                                     break;
                                 case 2:    //server
                                     author.openPrivateChannel().complete().sendMessage(GCommand.CommandServer(Gserver, msg).build()).queue();
@@ -317,6 +330,8 @@ public class MainBot extends ListenerAdapter {
                                 case 4:    //offline
                                     author.openPrivateChannel().complete().sendMessage(GCommand.CommandOff(Gserver).build()).queue();
                                     break;
+                                case 5:
+                                    author.openPrivateChannel().complete().sendMessage(GCommand.CommandPlayer(GPlayer,Bot).build()).queue();
                             }
                             event.getTextChannel().sendMessage(b.build()).queue();
                             List<Message> m = event.getTextChannel().getHistory().retrievePast(2).complete();
