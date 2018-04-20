@@ -80,7 +80,7 @@ public class GestionCommande {
         EmbedBuilder build = new EmbedBuilder();
         build.setTitle("**ETAT  [ " + heureString + " , " + dateString + " ]**");
         build.setColor(Color.red);
-        build.appendDescription("Il y a actuellement "+GPlayer.getNb_joueur()+" depuis "+GPlayer.getTime()+"\n");
+        build.appendDescription("\nIl y a actuellement "+GPlayer.getNb_joueur()+" joueurs connectés");
         build.appendDescription("\nVoici tous les serveurs : \n ");
         seeServerData(Gsrv, build);
         build.setFooter("©By "+event.getName()+" created by EscapeMan",event.getAvatarUrl());
@@ -272,23 +272,9 @@ public class GestionCommande {
         EmbedBuilder build = new EmbedBuilder();
         build.setColor(Color.red);
         build.setTitle("**Nombre de joueur connecté[ "+heureString+" , "+dateString+" ]**");
-        build.appendDescription("Il y a actuellement "+gp.getNb_joueur()+" depuis "+gp.getTime());
+        build.appendDescription("Il y a actuellement "+gp.getNb_joueur()+" joueurs connectés");
         build.setFooter("©By "+event.getName()+" created by EscapeMan",event.getAvatarUrl());
         return build;
     }
-    public EmbedBuilder ChangePlayer(GestionNbPlayer Gsrv,User event){
-        SimpleDateFormat d = new SimpleDateFormat("dd/MM/yyyy");
-        SimpleDateFormat h = new SimpleDateFormat("hh:mm");
 
-        Date currentTime_1 = new Date();
-
-        String dateString = d.format(currentTime_1);
-        String heureString = h.format(currentTime_1);
-        EmbedBuilder build = new EmbedBuilder();
-        build.setTitle("**NB_PLAYER_CHANGE  [ " + heureString + " , " + dateString + " ]**");
-        build.setColor(Color.red);
-        build.appendDescription("Il y a actuellement "+Gsrv.getNb_joueur());
-        build.setFooter("©By "+event.getName()+" created by EscapeMan",event.getAvatarUrl());
-        return build;
-    }
 }

@@ -52,10 +52,7 @@ public class MainBot extends ListenerAdapter {
             //clean channel info
             try {
                 GestionNbPlayer GPtemps = new GestionNbPlayer();
-                if(GPlayer.NbplayerActualize(GPtemps)){
-                    Information.sendTyping().queue();
-                    Information.sendMessage(GCommand.ChangePlayer(GPlayer,Bot).build()).queue();
-                }
+                GPlayer.NbplayerActualize(GPtemps);
                 GestionServer Gtemps = new GestionServer();
                 if (Gserver.GroupServerActualise(Gtemps)){
                     Information.sendTyping().queue();
