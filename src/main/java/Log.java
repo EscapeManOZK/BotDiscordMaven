@@ -29,6 +29,9 @@ public class Log {
     public void close() throws IOException {
         writer.close();
     }
+    public Boolean canPush(){
+        return change;
+    }
     public void add(){
         try {
             Runtime.getRuntime().exec("git add Log/dev.log");
@@ -47,6 +50,7 @@ public class Log {
         try {
             Runtime.getRuntime().exec("git pull");
             Runtime.getRuntime().exec("git push");
+            change=false;
         } catch (IOException e) {
             e.printStackTrace();
         }
