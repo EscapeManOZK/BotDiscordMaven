@@ -159,6 +159,7 @@ public class MainBot extends ListenerAdapter {
                         log.add();
                         log.commit();
                         log.push();
+                        System.out.println("push");
                     }
                 }
             });
@@ -197,6 +198,13 @@ public class MainBot extends ListenerAdapter {
          */
         @Override
         public void onMessageReceived(MessageReceivedEvent event) {
+            SimpleDateFormat d = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat h = new SimpleDateFormat("hh:mm");
+
+            Date currentTime_1 = new Date();
+
+            String dateString = d.format(currentTime_1);
+            String heureString = h.format(currentTime_1);
             try {
                 log.launch();
             } catch (IOException e) {
@@ -233,7 +241,7 @@ public class MainBot extends ListenerAdapter {
                     }
                     System.out.printf("[%s]<%s>: %s\n", textChannel.getName(), name, msg);
                     try {
-                        log.write("["+textChannel.getName()+"]<"+name+">: "+msg);
+                        log.write("["+heureString+" , "+dateString+"]["+textChannel.getName()+"]<"+name+">: "+msg);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -242,7 +250,7 @@ public class MainBot extends ListenerAdapter {
 
                     System.out.printf("[PRIV]<%s>: %s\n", author.getName(), msg);
                     try {
-                        log.write("[PRIV]<"+author.getName()+">: "+msg);
+                        log.write("["+heureString+" , "+dateString+"][PRIV]<"+author.getName()+">: "+msg);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -252,7 +260,7 @@ public class MainBot extends ListenerAdapter {
 
                     System.out.printf("[GRP: %s]<%s>: %s\n", groupName, author.getName(), msg);
                     try {
-                        log.write("[GRP: "+groupName+"]<"+author.getName()+">: "+msg);
+                        log.write("["+heureString+" , "+dateString+"][GRP: "+groupName+"]<"+author.getName()+">: "+msg);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

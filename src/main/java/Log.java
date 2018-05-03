@@ -51,7 +51,6 @@ public class Log {
     }
     public void push(){
         try {
-            Runtime.getRuntime().exec("git pull");
             Runtime.getRuntime().exec("git push");
             change=false;
         } catch (IOException e) {
