@@ -41,7 +41,7 @@ public class Log {
     }
     public void commit(){
         try {
-            Runtime.getRuntime().exec("git commit -m \"log"+i+"\"");
+            Runtime.getRuntime().exec("git commit -m 'log'");
             i++;
         } catch (IOException e) {
             e.printStackTrace();
