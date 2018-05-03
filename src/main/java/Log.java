@@ -34,7 +34,7 @@ public class Log {
     }
     public void add(){
         try {
-            Runtime.getRuntime().exec("git add Log/dev.log");
+            Runtime.getRuntime().exec("git add *");
         } catch (IOException e) {
             e.printStackTrace();
         }
