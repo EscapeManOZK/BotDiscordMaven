@@ -1,3 +1,4 @@
+
 import java.io.*;
 
 public class Log {
@@ -32,27 +33,13 @@ public class Log {
     public Boolean canPush(){
         return change;
     }
-    public void add(){
-        try {
-            Runtime.getRuntime().exec("git add *");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    public void commit(){
-        try {
-            Runtime.getRuntime().exec("git commit -m \"log"+i+"\"");
-            i++;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     public void push(){
         try {
-            Runtime.getRuntime().exec("git push");
+            Runtime r = Runtime.getRuntime();
+            Process p = r.exec("/home/romain/Bureau/BotDiscordMaven/script.sh");
             change=false;
-        } catch (IOException e) {
-            e.printStackTrace();
+        }catch(Exception e) {
+            System.out.println("erreur d'execution script.sh" + e.toString());
         }
     }
 }

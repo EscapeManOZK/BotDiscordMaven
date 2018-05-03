@@ -157,7 +157,6 @@ public class MainBot extends ListenerAdapter {
             public void actionPerformed(ActionEvent ae) {
                 if (log.canPush()){
                     log.push();
-                    System.out.println("push");
                 }
             }
         });
