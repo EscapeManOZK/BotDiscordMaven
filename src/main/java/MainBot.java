@@ -151,19 +151,6 @@ public class MainBot extends ListenerAdapter {
                 }
             });
             timer.start();
-            Timer git;
-            git = new Timer(100000, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent ae) {
-                    if (log.canPush()){
-                        log.add();
-                        log.commit();
-                        log.push();
-                        System.out.println("push");
-                    }
-                }
-            });
-            git.start();
             while (!stop) {
                 Scanner scanner = new Scanner(System.in);
                 String cmd = scanner.next();
