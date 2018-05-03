@@ -7,6 +7,7 @@ public class Log {
     private File file;
     private FileWriter writer;
     private Boolean change;
+    private int i;
     public Log(){
         file=new File(url);
         try {
@@ -15,6 +16,7 @@ public class Log {
             e.printStackTrace();
         }
         change=false;
+        i=0;
     }
     public void launch() throws IOException {
         writer = new FileWriter(file,true);
@@ -41,7 +43,8 @@ public class Log {
     }
     public void commit(){
         try {
-            Runtime.getRuntime().exec("git commit -m \"log\"");
+            Runtime.getRuntime().exec("git commit -m \"log"+i+"\"");
+            i++;
         } catch (IOException e) {
             e.printStackTrace();
         }
