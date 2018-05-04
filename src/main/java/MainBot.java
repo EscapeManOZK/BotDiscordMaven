@@ -380,7 +380,7 @@ public class MainBot extends ListenerAdapter {
                     }
 
                 }
-            } else if (!event.isFromType(ChannelType.PRIVATE)) {
+            } else
                 if (event.getTextChannel().getId().equals("430035981660454942") && msg.contains(event.getAuthor().getName())) {
                     event.getAuthor().openPrivateChannel().complete().sendTyping().queue();
                     event.getTextChannel().sendTyping().queue();
@@ -393,7 +393,7 @@ public class MainBot extends ListenerAdapter {
                     event.getAuthor().openPrivateChannel().complete().sendMessage("Voici la liste de mes commandes :").queue();
                     event.getAuthor().openPrivateChannel().complete().sendMessage(GCommand.CommandHelp(Gserver, Bot).build()).queue();
                 }
-            }
+
         }
     }
 }
