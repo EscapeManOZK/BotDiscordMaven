@@ -22,6 +22,7 @@ public class GestionCommande {
         Commande off = new Commande("OFFLINE", "offline","Affiche les serveurs non disponible");
         Commande clean = new Commande("CLEAN","clean","<Nb de message> Supprime le nombre indiqué de messages dans le channel ");
         Commande player = new Commande("PLAYER","player","Affiche le nombre de personne connecter");
+        Commande Poll = new Commande("POLL","poll","_t: <Nom du formulaire> _d: <Corp du formulaire> _o: [\"Nom du Premier choix\"<emoji>, .... ] Cette commande permet de créer un formulaire assez simple avec plusieurs choix de réponse");
         Commande Message = new Commande("","mp","");
         m_command.add(help);
         m_command.add(etat);

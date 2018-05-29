@@ -156,7 +156,7 @@ public class MainBot extends ListenerAdapter {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 if (log.canPush()){
-                    log.push();
+                    //log.push();
                 }
             }
         });
@@ -241,6 +241,18 @@ public class MainBot extends ListenerAdapter {
                     log.write("["+heureString+" , "+dateString+"]["+textChannel.getName()+"]<"+name+">: "+msg);
                 } catch (IOException e) {
                     e.printStackTrace();
+                }
+                if (event.getTextChannel().getId().equals("430035981660454942") && msg.contains(event.getAuthor().getName())) {
+                    event.getAuthor().openPrivateChannel().complete().sendTyping().queue();
+                    event.getTextChannel().sendTyping().queue();
+                    EmbedBuilder build = new EmbedBuilder();
+                    build.setTitle("**Bienvenue sur le discord de YukiNoNeko**");
+                    build.setAuthor(event.getGuild().getSelfMember().getNickname());
+                    build.appendDescription("Bienvenue @" + event.getAuthor().getName() + " sur le discord \nRegarde tes messages privées :wink:");
+                    build.setFooter("©By " + event.getGuild().getSelfMember().getUser().getName() + " created by EscapeMan", null);
+                    event.getTextChannel().sendMessage(build.build()).queue();
+                    event.getAuthor().openPrivateChannel().complete().sendMessage("Voici la liste de mes commandes :").queue();
+                    event.getAuthor().openPrivateChannel().complete().sendMessage(GCommand.CommandHelp(Gserver, Bot).build()).queue();
                 }
             } else if (event.isFromType(ChannelType.PRIVATE)) {
                 privateChannel = event.getPrivateChannel();
@@ -380,19 +392,8 @@ public class MainBot extends ListenerAdapter {
                     }
 
                 }
-            } else
-                if (event.getTextChannel().getId().equals("430035981660454942") && msg.contains(event.getAuthor().getName())) {
-                    event.getAuthor().openPrivateChannel().complete().sendTyping().queue();
-                    event.getTextChannel().sendTyping().queue();
-                    EmbedBuilder build = new EmbedBuilder();
-                    build.setTitle("**Bienvenue sur le discord de YukiNoNeko**");
-                    build.setAuthor(event.getGuild().getSelfMember().getNickname());
-                    build.appendDescription("Bienvenue @" + event.getAuthor().getName() + " sur le discord \nRegarde tes messages privées :wink:");
-                    build.setFooter("©By " + event.getGuild().getSelfMember().getUser().getName() + " created by EscapeMan", null);
-                    event.getTextChannel().sendMessage(build.build()).queue();
-                    event.getAuthor().openPrivateChannel().complete().sendMessage("Voici la liste de mes commandes :").queue();
-                    event.getAuthor().openPrivateChannel().complete().sendMessage(GCommand.CommandHelp(Gserver, Bot).build()).queue();
-                }
+            }
+
 
         }
     }
