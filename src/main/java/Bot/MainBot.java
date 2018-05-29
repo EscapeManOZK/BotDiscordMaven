@@ -123,7 +123,7 @@ public class MainBot extends ListenerAdapter {
                     .buildBlocking();
             Information = jda.getTextChannelById("435171789589577748");
             Bot = jda.getSelfUser();
-            jda.getPresence().setGame(Game.of(Game.GameType.DEFAULT,"SoulWorker.Spy.Srv | s!help","https://www.g-status.com/game/soulworker"));
+            jda.getPresence().setGame(Game.of(Game.GameType.DEFAULT,"soulworker-wiki.com | s!help","www.soulworker-wiki.com/"));
         }
         catch (LoginException e)
         {

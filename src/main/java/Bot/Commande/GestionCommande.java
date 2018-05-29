@@ -318,40 +318,41 @@ public class GestionCommande {
                     }
                 } else if (split[i].equals("_o:")) {
                     i++;
-                    while (!split[i].equals("_d:") && !split[i].equals("_t:") && !fini) {
-                        if (!split[i].equals("")&&split.length-i>=1) {
-                            String[] option = split[i].split("'");
-                            if (option.length>=2) {
-                                boolean trouve=false;
-                                Emote m = null;
-                                for (int j=0;j<event.getMessage().getEmotes().size()&&!trouve;j++)
-                                {
-                                    if(option[2].split(":")[1].contains(event.getMessage().getEmotes().get(j).getName())){
-                                        trouve=true;
-                                        m=event.getMessage().getEmotes().get(j);
+                    if(split.length-i<=1){
+                        erreur="Il faux saisir deux option au minimun";
+                    }else {
+                        while (!split[i].equals("_d:") && !split[i].equals("_t:") && !fini) {
+                            if (!split[i].equals("")) {
+                                String[] option = split[i].split("'");
+                                if (option.length >= 2) {
+                                    boolean trouve = false;
+                                    Emote m = null;
+                                    for (int j = 0; j < event.getMessage().getEmotes().size() && !trouve; j++) {
+                                        if (option[2].split(":")[1].contains(event.getMessage().getEmotes().get(j).getName())) {
+                                            trouve = true;
+                                            m = event.getMessage().getEmotes().get(j);
+                                        }
                                     }
+                                    if (m == null) {
+                                        erreur = "Erreur emoji veillez réessayer avec les emojis du serveur";
+                                    }
+                                    formulaire.addOption(option[1], option[2], m);
+                                } else {
+                                    erreur = "Il faux saisir le nom et l'emoji";
                                 }
-                                if (m==null){
-                                    erreur="Erreur emoji veillez réessayer avec les emojis du serveur";
-                                }
-                                formulaire.addOption(option[1], option[2],m);
-                            }else {
-                                erreur="Il faux saisir le nom et l'emoji";
                             }
-                        }else {
-                            erreur="Il faux saisir deux option";
-                        }
-                        if (i + 1 < split.length) {
-                            i++;
-                        } else {
-                            fini = true;
-                        }
+                            if (i + 1 < split.length) {
+                                i++;
+                            } else {
+                                fini = true;
+                            }
 
+                        }
                     }
-                    if(tmpi==i){
-                        i++;
-                        tmpi++;
-                    }
+                }
+                if(tmpi==i){
+                    i++;
+                    tmpi++;
                 }
             }
             boolean cas;
@@ -359,9 +360,12 @@ public class GestionCommande {
             build.setTitle("**[FORMULAIRE] "+formulaire.getM_titre()+"**");
             if (!formulaire.getM_question().equals("")&&formulaire.getOptionSize()>0&&erreur==""){
                 cas=true;
-                message="__"+formulaire.getM_question()+"__\n";
+                message=formulaire.getM_question()+"\n";
                 for(i=0;i<formulaire.getOptionSize();i++){
-                    message+=formulaire.getOption(i).getM_titre()+" "+formulaire.getOption(i).getEmojiName()+" ";
+                    message+=formulaire.getOption(i).getM_titre();
+                    if (i+1<formulaire.getOptionSize()){
+                        message+="  /  ";
+                    }
                 }
                 build.appendDescription(message);
             }else {
@@ -372,6 +376,7 @@ public class GestionCommande {
             build.setFooter("©By "+Bot.getName()+" created by EscapeMan",Bot.getAvatarUrl());
             channel.sendMessage(build.build()).queue();
             if (cas) {
+                event.getMessage().delete().queue();
                 List<Message> m = event.getTextChannel().getHistory().retrievePast(2).complete();
                 Message poll = m.get(0);
                 for (i = 0; i < formulaire.getOptionSize(); i++) {
