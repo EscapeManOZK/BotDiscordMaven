@@ -1,7 +1,15 @@
+package Bot.Commande;
+
+import Bot.MainBot;
+import Bot.Serveur.GestionNbPlayer;
+import Bot.Serveur.GestionServer;
+import Bot.Serveur.GroupServer;
+import Bot.Serveur.Serveur;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,7 +30,7 @@ public class GestionCommande {
         Commande off = new Commande("OFFLINE", "offline","Affiche les serveurs non disponible");
         Commande clean = new Commande("CLEAN","clean","<Nb de message> Supprime le nombre indiqué de messages dans le channel ");
         Commande player = new Commande("PLAYER","player","Affiche le nombre de personne connecter");
-        Commande Poll = new Commande("POLL","poll","_t: <Nom du formulaire> _d: <Corp du formulaire> _o: [\"Nom du Premier choix\"<emoji>, .... ] Cette commande permet de créer un formulaire assez simple avec plusieurs choix de réponse");
+        Commande Poll = new Commande("POLL","poll","_t: <Nom du formulaire>(facultatif) _d: <Corp du formulaire> _o: ['Nom du Premier choix'<emoji> 'Nom du deuxième choix'<emoji> .... ] Cette commande permet de créer un formulaire assez simple avec plusieurs choix de réponse");
         Commande Message = new Commande("","mp","");
         m_command.add(help);
         m_command.add(etat);
@@ -30,6 +38,7 @@ public class GestionCommande {
         m_command.add(on);
         m_command.add(off);
         m_command.add(player);
+        m_command.add(Poll);
         m_command.add(clean);
         m_command.add(Message);
     }
@@ -47,7 +56,7 @@ public class GestionCommande {
     }
 
 
-    public EmbedBuilder CommandHelp(GestionServer Gsrv,User event){
+    public EmbedBuilder CommandHelp(GestionServer Gsrv, User event){
         EmbedBuilder build = new EmbedBuilder();
         build.setTitle("**HELP**");
         build.setColor(Color.red);
@@ -238,7 +247,7 @@ public class GestionCommande {
         build.setFooter("©By "+usr.getName()+" created by EscapeMan",null);
         return build;
     }
-    public EmbedBuilder CommandMessage(User usr, String msg,MessageReceivedEvent event){
+    public EmbedBuilder CommandMessage(User usr, String msg,MessageReceivedEvent event){ // à refaire
         EmbedBuilder build = new EmbedBuilder();
         String[] split = msg.split(" ");
         if (split.length<=1){
@@ -262,7 +271,7 @@ public class GestionCommande {
         }
         return build;
     }
-    public EmbedBuilder CommandPlayer(GestionNbPlayer gp,User event){
+    public EmbedBuilder CommandPlayer(GestionNbPlayer gp, User event){
         SimpleDateFormat d = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat h = new SimpleDateFormat("hh:mm");
 
@@ -276,6 +285,104 @@ public class GestionCommande {
         build.appendDescription("Il y a actuellement "+gp.getNb_joueur()+" joueurs connectés");
         build.setFooter("©By "+event.getName()+" created by EscapeMan",event.getAvatarUrl());
         return build;
+    }
+    public void CommandPoll(User Bot, MessageReceivedEvent event, String msg, MessageChannel channel,JDA jda){
+        EmbedBuilder build = new EmbedBuilder();
+        String[] split = msg.split(" ");
+        String erreur ="";
+        if (split.length>1){
+            Poll formulaire = new Poll();
+            boolean fini=false;
+            int i = 1;
+            int tmpi =1;
+            while (!fini) {
+                if (split[i].equals("_t:")) {
+                    i++;
+                    while (!split[i].equals("_d:") && !split[i].equals("_o:") && !fini) {
+                        formulaire.addToTitre(split[i] + " ");
+                        if (i+1<split.length) {
+                            i++;
+                        }else {
+                            fini=true;
+                        }
+                    }
+                } else if (split[i].equals("_d:")) {
+                    i++;
+                    while (!split[i].equals("_t:") && !split[i].equals("_o:") && !fini) {
+                        formulaire.addToQuestion(split[i] + " ");
+                        if (i+1<split.length) {
+                            i++;
+                        }else {
+                            fini=true;
+                        }
+                    }
+                } else if (split[i].equals("_o:")) {
+                    i++;
+                    while (!split[i].equals("_d:") && !split[i].equals("_t:") && !fini) {
+                        if (!split[i].equals("")&&split.length-i>=1) {
+                            String[] option = split[i].split("'");
+                            if (option.length>=2) {
+                                boolean trouve=false;
+                                Emote m = null;
+                                for (int j=0;j<event.getMessage().getEmotes().size()&&!trouve;j++)
+                                {
+                                    if(option[2].split(":")[1].contains(event.getMessage().getEmotes().get(j).getName())){
+                                        trouve=true;
+                                        m=event.getMessage().getEmotes().get(j);
+                                    }
+                                }
+                                if (m==null){
+                                    erreur="Erreur emoji veillez réessayer avec les emojis du serveur";
+                                }
+                                formulaire.addOption(option[1], option[2],m);
+                            }else {
+                                erreur="Il faux saisir le nom et l'emoji";
+                            }
+                        }else {
+                            erreur="Il faux saisir deux option";
+                        }
+                        if (i + 1 < split.length) {
+                            i++;
+                        } else {
+                            fini = true;
+                        }
+
+                    }
+                    if(tmpi==i){
+                        i++;
+                        tmpi++;
+                    }
+                }
+            }
+            boolean cas;
+            String message="";
+            build.setTitle("**[FORMULAIRE] "+formulaire.getM_titre()+"**");
+            if (!formulaire.getM_question().equals("")&&formulaire.getOptionSize()>0&&erreur==""){
+                cas=true;
+                message="__"+formulaire.getM_question()+"__\n";
+                for(i=0;i<formulaire.getOptionSize();i++){
+                    message+=formulaire.getOption(i).getM_titre()+" "+formulaire.getOption(i).getEmojiName()+" ";
+                }
+                build.appendDescription(message);
+            }else {
+                cas=false;
+                if (erreur=="")erreur="Veillez poser votre question";
+                build.appendDescription("**__[ERREUR] Donnée manquante__** \n \n"+erreur+"\n"+event.getAuthor().getName()+" suivais l'exemple suivant\nExemple : s!poll _t: Titre _d: Description _o: 'option1':unicorn~1: 'option2':Dabbing: ");
+            }
+            build.setFooter("©By "+Bot.getName()+" created by EscapeMan",Bot.getAvatarUrl());
+            channel.sendMessage(build.build()).queue();
+            if (cas) {
+                List<Message> m = event.getTextChannel().getHistory().retrievePast(2).complete();
+                Message poll = m.get(0);
+                for (i = 0; i < formulaire.getOptionSize(); i++) {
+                    try {
+                        poll.addReaction(formulaire.getOption(i).getM_Emote()).queue();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
 }

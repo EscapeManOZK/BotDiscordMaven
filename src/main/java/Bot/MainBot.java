@@ -1,3 +1,8 @@
+package Bot;
+
+import Bot.Commande.GestionCommande;
+import Bot.Serveur.GestionNbPlayer;
+import Bot.Serveur.GestionServer;
 import net.dv8tion.jda.client.entities.Group;
 
 import net.dv8tion.jda.core.*;
@@ -289,8 +294,11 @@ public class MainBot extends ListenerAdapter {
             }
             i--;
             if (find) {
-                if (i == 6 || i == 7) {
-                    if (i == 6) {
+                if (i == 6 || i == 7 || i == 8) {
+                    if (i == 6){
+                        channel.sendTyping().queue();
+                        GCommand.CommandPoll(Bot,event,msg,channel,jda);
+                    }else if (i == 7) {
                         channel.sendTyping().queue();
                         channel.sendMessage(GCommand.CommandClean(event, msg, Bot).build()).queue();
                         List<Message> m = event.getTextChannel().getHistory().retrievePast(2).complete();
@@ -383,6 +391,7 @@ public class MainBot extends ListenerAdapter {
                                     break;
                                 case 5:
                                     author.openPrivateChannel().complete().sendMessage(GCommand.CommandPlayer(GPlayer, Bot).build()).queue();
+                                    break;
                             }
                             event.getTextChannel().sendMessage(b.build()).queue();
                             List<Message> m = event.getTextChannel().getHistory().retrievePast(2).complete();

@@ -1,3 +1,4 @@
+package Bot;
 
 import java.io.*;
 

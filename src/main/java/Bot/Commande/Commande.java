@@ -1,3 +1,5 @@
+package Bot.Commande;
+
 public class Commande {
     private String m_title;
     private String m_command;

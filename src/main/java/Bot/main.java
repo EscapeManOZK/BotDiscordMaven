@@ -1,3 +1,7 @@
+package Bot;
+
+import Bot.MainBot;
+
 public class main {
     public static final void main(String[] args)  {
         MainBot bot = new MainBot();

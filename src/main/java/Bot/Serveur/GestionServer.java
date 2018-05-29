@@ -1,3 +1,7 @@
+package Bot.Serveur;
+
+import Bot.Serveur.GroupServer;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
