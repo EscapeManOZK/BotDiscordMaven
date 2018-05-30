@@ -265,9 +265,9 @@ public class MainBot extends ListenerAdapter {
                     build.setTitle("**Bienvenue sur le discord de YukiNoNeko**");
                     build.setAuthor(event.getGuild().getSelfMember().getNickname());
                     build.setColor(Color.red);
-                    build.addField("Coucou " + event.getAuthor().getName(),"Regarde tes messages privées",true);
+                    build.addField("Coucou " + event.getAuthor().getName(),"Regarde tes messages privées\nTu y trouvera la liste de mes\ncommandes",true);
                     //build.addBlankField(false);
-                    build.addField("La Gestion des Rôles","Il faux que tu aille valider les régles du discord\nprésent dans le channel quelques_règles en clickant\nsur le bouton valider :white_check_mark: pour obtenir tes droits ",true);
+                    build.addField("La Gestion des Rôles","Il faux que tu aille valider les régles du discord\nprésent dans le channel quelques_règles en\nclickant sur le bouton valider :white_check_mark: pour\nobtenir tes droits ",true);
                     build.addField("Bonne continuation sur le discord petite licorne","De la part de l'équipe de modération :wink::kissing_heart: ",false);
                     build.setFooter("©By " + event.getGuild().getSelfMember().getUser().getName() + " created by EscapeMan", null);
                     event.getTextChannel().sendMessage(build.build()).queue();
