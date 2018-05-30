@@ -7,11 +7,16 @@ import net.dv8tion.jda.client.entities.Group;
 
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.core.handle.MessageReactionHandler;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.core.managers.GuildController;
 
 import javax.security.auth.login.LoginException;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -32,6 +37,7 @@ public class MainBot extends ListenerAdapter {
     private Timer t;
     private User Bot;
     private Log log;
+    private GuildController my_guildControl;
     JDA jda ;
 
 
@@ -52,6 +58,7 @@ public class MainBot extends ListenerAdapter {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
     }
     private void onChangeServer() {
@@ -124,6 +131,7 @@ public class MainBot extends ListenerAdapter {
             Information = jda.getTextChannelById("435171789589577748");
             Bot = jda.getSelfUser();
             jda.getPresence().setGame(Game.of(Game.GameType.DEFAULT,"soulworker-wiki.com | s!help","www.soulworker-wiki.com/"));
+            my_guildControl=new GuildController(jda.getGuildById("429033577741811712"));
         }
         catch (LoginException e)
         {
@@ -247,13 +255,20 @@ public class MainBot extends ListenerAdapter {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                if (event.getTextChannel().getId().equals("430035981660454942") && msg.contains(event.getAuthor().getName())) {
+                //gestion bienvenue
+                if (event.getTextChannel().getId().equals("430035981660454942") && (msg.contains(event.getAuthor().getName())||msg.equals(""))&&event.getAuthor()!=Bot) {
+                    my_guildControl.addSingleRoleToMember(event.getMember(),my_guildControl.getJDA().getRoleById("451363089846108161")).queue();
                     event.getAuthor().openPrivateChannel().complete().sendTyping().queue();
                     event.getTextChannel().sendTyping().queue();
                     EmbedBuilder build = new EmbedBuilder();
+                    System.out.printf(String.valueOf(event.getMessage().getContentRaw().length()));
                     build.setTitle("**Bienvenue sur le discord de YukiNoNeko**");
                     build.setAuthor(event.getGuild().getSelfMember().getNickname());
-                    build.appendDescription("Bienvenue @" + event.getAuthor().getName() + " sur le discord \nRegarde tes messages privées :wink:");
+                    build.setColor(Color.red);
+                    build.addField("Coucou " + event.getAuthor().getName(),"Regarde tes messages privées",true);
+                    //build.addBlankField(false);
+                    build.addField("La Gestion des Rôles","Il faux que tu aille valider les régles du discord\nprésent dans le channel quelques_règles en clickant\nsur le bouton valider :white_check_mark: pour obtenir tes droits ",true);
+                    build.addField("Bonne continuation sur le discord petite licorne","De la part de l'équipe de modération :wink::kissing_heart: ",false);
                     build.setFooter("©By " + event.getGuild().getSelfMember().getUser().getName() + " created by EscapeMan", null);
                     event.getTextChannel().sendMessage(build.build()).queue();
                     event.getAuthor().openPrivateChannel().complete().sendMessage("Voici la liste de mes commandes :").queue();
@@ -406,6 +421,23 @@ public class MainBot extends ListenerAdapter {
 
         }
     }
+    @Override
+    public void onMessageReactionAdd(MessageReactionAddEvent event)
+    {
+        super.onMessageReactionAdd(event);
+        if (!event.getUser().isBot())
+        {
+            if(event.getMessageId().equals("439562002466078721")){
+                if(event.getMember().getRoles().size()==1&&event.getMember().getRoles().get(0).getId().equals("451363089846108161")) {
+                    my_guildControl.removeSingleRoleFromMember(event.getMember(), my_guildControl.getJDA().getRoleById("451363089846108161")).queue();
+                    my_guildControl.addSingleRoleToMember(event.getMember(), my_guildControl.getJDA().getRoleById("429315240686125067")).queue();
+                }
+                event.getReaction().removeReaction(event.getUser()).queue();
+            }
+        }
+
+    }
+
 }
 
 
