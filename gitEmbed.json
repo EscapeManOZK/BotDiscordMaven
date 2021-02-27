@@ -1,0 +1,12 @@
+{
+    "owner": "EscapeManOZK",
+    "repo": "BotDiscordMaven",
+    "ref": "master",
+    "embed": [
+        {
+            "type": "java",
+            "label": "Main Java File",
+            "path": "src/main/java/Bot/MainBot.java"
+        }
+    ]
+}
